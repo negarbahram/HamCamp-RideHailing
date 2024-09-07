@@ -18,8 +18,9 @@ public class Trip {
     @Id
     @GeneratedValue
     Integer id;
-
-    Boolean state;
+    Boolean isOver;
+    double amount;
+    boolean isPaid;
 
     @ManyToOne
     @JoinColumn

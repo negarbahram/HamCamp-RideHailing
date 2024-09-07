@@ -17,7 +17,7 @@ public class TripStatusController {
 
     private final TripStatusService tripStatusService;
     @GetMapping("")
-    public ResponseEntity<Trip> creatTrip(@RequestHeader HttpHeaders headers) {
+    public ResponseEntity<Trip> tripStatus(@RequestHeader HttpHeaders headers) {
         return ResponseEntity.ok(tripStatusService.getTripStatus(headers));
     }
 }

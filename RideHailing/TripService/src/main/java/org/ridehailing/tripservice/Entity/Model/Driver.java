@@ -18,9 +18,7 @@ public class Driver {
     @Id
     @GeneratedValue
     Integer id;
-
     Point location;
-
     String email;
 
     public Driver(Point location) {

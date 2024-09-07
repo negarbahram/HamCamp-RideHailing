@@ -23,7 +23,7 @@ public class PassengerService {
     public Trip getActiveTrip(HttpHeaders headers) {
         Passenger passenger = getPassengerByToken(headers);
         List<Trip> trips = passenger.getTripHistory();
-        Optional<Trip> trip = trips.stream().filter(Trip::getState).toList().stream().findFirst();
+        Optional<Trip> trip = trips.stream().filter(Trip::getIsOver).toList().stream().findFirst();
         return trip.orElseThrow(TripNotFoundException::new);
     }
 
