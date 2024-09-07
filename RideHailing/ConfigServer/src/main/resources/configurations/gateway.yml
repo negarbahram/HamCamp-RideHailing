@@ -1,6 +1,10 @@
 eureka:
+  instance:
+    hostname: localhost
   client:
-    register-with-eureka: false
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
 server:
   port: 8222
 
@@ -9,15 +13,21 @@ spring:
     name: gateway
   cloud:
     gateway:
-      mvc:
-        discovery:
-          locator:
-            enabled: true
-        routes:
-          - id: students
-            uri: http://localhost:8090
-            predicates:
-              - Path=/demo/**
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: demo
+          uri: http://localhost:8090
+          predicates:
+            - Path=/demo/**
+          filters:
+            - AuthenticationFilter
+
+        - id: authentication
+          uri: http://localhost:9898
+          predicates:
+            - Path=/auth/**
 
 management:
   tracing:
