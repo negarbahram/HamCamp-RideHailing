@@ -29,6 +29,13 @@ spring:
           predicates:
             - Path=/auth/**
 
+        - id: tripService
+          uri: http://localhost:7070
+          predicates:
+            - Path=/trip/**
+          filters:
+            - AuthenticationFilter
+
 management:
   tracing:
     sampling:

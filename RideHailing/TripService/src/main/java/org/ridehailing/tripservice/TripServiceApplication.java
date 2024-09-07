@@ -33,11 +33,11 @@ public class TripServiceApplication {
             driverRepository.save(new Driver(geometryFactory.createPoint(new Coordinate(3, 6))));
             driverRepository.save(new Driver(geometryFactory.createPoint(new Coordinate(3, 8))));
             driverRepository.save(new Driver(geometryFactory.createPoint(new Coordinate(4, 9))));
-
+/*
             passengerRepository.save(new Passenger("neg"));
             passengerRepository.save(new Passenger("bah"));
             passengerRepository.save(new Passenger("sar"));
-
+*/
             //    }, new PrecisionModel())));
           /*  Faker faker = new Faker();
 

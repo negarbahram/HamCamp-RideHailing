@@ -19,6 +19,8 @@ public class Trip {
     @GeneratedValue
     Integer id;
 
+    Boolean state;
+
     @ManyToOne
     @JoinColumn
     @JsonIgnoreProperties("tripHistory")

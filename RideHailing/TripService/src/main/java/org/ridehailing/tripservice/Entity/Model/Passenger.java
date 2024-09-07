@@ -20,13 +20,13 @@ public class Passenger {
     @GeneratedValue
     Integer id;
 
-    String firstname;
+    String email;
 
     @OneToMany(mappedBy = "passenger")
     @JsonIgnoreProperties("passenger")
     List<Trip> tripHistory;
 
-    public Passenger(String firstname) {
-        this.firstname = firstname;
+    public Passenger(String email) {
+        this.email = email;
     }
 }
