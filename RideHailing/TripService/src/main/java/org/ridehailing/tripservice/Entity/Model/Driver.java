@@ -21,6 +21,8 @@ public class Driver {
 
     Point location;
 
+    String email;
+
     public Driver(Point location) {
         this.location = location;
     }

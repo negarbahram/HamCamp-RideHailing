@@ -30,6 +30,7 @@ public class CreatTripService {
         Trip trip = new Trip(null, true, passenger, driver);
 
         rabbitTemplate.convertAndSend(RabbitMQConfig.REPORTING_QUEUE, trip.toString());
+        rabbitTemplate.convertAndSend(RabbitMQConfig.NOTIFICATION_QUEUE, driver.getEmail());
 
         return tripRepository.save(trip);
     }
