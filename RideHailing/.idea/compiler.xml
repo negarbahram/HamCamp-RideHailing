@@ -11,6 +11,7 @@
         <module name="DiscoveryServer" />
         <module name="APIGateway" />
         <module name="ConfigServer" />
+        <module name="ReportingService" />
         <module name="AuthenticationService" />
         <module name="demo1" />
       </profile>
@@ -25,6 +26,7 @@
       <module name="AuthenticationService" options="-parameters" />
       <module name="ConfigServer" options="-parameters" />
       <module name="DiscoveryServer" options="-parameters" />
+      <module name="ReportingService" options="-parameters" />
       <module name="TripService" options="-parameters" />
       <module name="demo" options="-parameters" />
       <module name="demo1" options="-parameters" />

@@ -1,7 +1,6 @@
 package org.ridehailing.tripservice.Service;
 
 import lombok.RequiredArgsConstructor;
-import org.ridehailing.tripservice.DTO.CreatTripRequest;
 import org.ridehailing.tripservice.Entity.Model.Trip;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
