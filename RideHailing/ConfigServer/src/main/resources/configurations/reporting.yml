@@ -2,9 +2,8 @@
 spring:
   application:
     name: ReportingService
-  config:
-    import: optional:configserver:http://localhost:8888
   datasource:
+    db-kind: postgres
     url: jdbc:postgresql://localhost:5432/reporting
     password: 1234
     driver-class-name: org.postgresql.Driver

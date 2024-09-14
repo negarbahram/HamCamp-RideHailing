@@ -22,47 +22,16 @@ public class TripServiceApplication {
     }
     @Bean
     public CommandLineRunner commandLineRunner(
-            DriverRepository driverRepository,
-            PassengerRepository passengerRepository
+            DriverRepository driverRepository
     ) {
         return args -> {
 
             GeometryFactory geometryFactory = new GeometryFactory();
 
-            driverRepository.save(new Driver(geometryFactory.createPoint(new Coordinate(3, 5))));
-            driverRepository.save(new Driver(geometryFactory.createPoint(new Coordinate(3, 6))));
-            driverRepository.save(new Driver(geometryFactory.createPoint(new Coordinate(3, 8))));
-            driverRepository.save(new Driver(geometryFactory.createPoint(new Coordinate(4, 9))));
-/*
-            passengerRepository.save(new Passenger("neg"));
-            passengerRepository.save(new Passenger("bah"));
-            passengerRepository.save(new Passenger("sar"));
-*/
-            //    }, new PrecisionModel())));
-          /*  Faker faker = new Faker();
-
-            for(int i = 0; i < 10; i++) {
-
-                var food = Food.builder()
-                        .name(faker.food().dish())
-                        .category(faker.food().ingredient())
-                        .price(faker.number().numberBetween(0, 100))
-                        .build();
-                foodRepository.save(food);
-
-                orderRepository.save(new Order());
-                restaurantRepository.save(new Restaurant());
-
-                var customer = Customer.builder()
-                        .username(faker.name().username())
-                        .password(Integer.toString(faker.number().numberBetween(100, 1000)))
-                        .build();
-                userRepository.save(customer);
-            }*/
-
-            //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);
-
-            // userRepository.save(new User(null,"sar", encoder.encode("1234")));
+            driverRepository.save(new Driver(geometryFactory.createPoint(new Coordinate(3, 5)), "first@gmail.com"));
+            driverRepository.save(new Driver(geometryFactory.createPoint(new Coordinate(3, 6)), "seconf@gmail.com"));
+            driverRepository.save(new Driver(geometryFactory.createPoint(new Coordinate(3, 8)), "neg@gmail.com"));
+            driverRepository.save(new Driver(geometryFactory.createPoint(new Coordinate(4, 9)), "bah@gmail.com"));
         };
     }
 

@@ -20,16 +20,17 @@ public class CreatTripService {
     private final PassengerService passengerService;
     private final TripRepository tripRepository;
     private final RabbitTemplate rabbitTemplate;
+
     public Trip creatTrip(HttpHeaders headers, CreatTripRequest creatTripRequest) {
 
-        Passenger passenger = passengerService.getPassengerByToken(headers);
+        Passenger passenger = passengerService.getPassenger(headers);
 
         Driver driver = allocateDriverService.findClosestDriver(creatTripRequest)
                 .orElseThrow(DriverNotFoundException::new);
 
-        Trip trip = new Trip(null, true, passenger, driver);
+        Trip trip = new Trip(null, true, 10000, false, passenger, driver);
 
-        rabbitTemplate.convertAndSend(RabbitMQConfig.REPORTING_QUEUE, trip.toString());
+        rabbitTemplate.convertAndSend(RabbitMQConfig.REPORTING_QUEUE, "trip creation-" + trip);
         rabbitTemplate.convertAndSend(RabbitMQConfig.NOTIFICATION_QUEUE, driver.getEmail());
 
         return tripRepository.save(trip);

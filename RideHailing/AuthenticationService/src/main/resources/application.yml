@@ -3,7 +3,6 @@ spring:
     name: AuthenticationService
   config:
     import: optional:configserver:http://localhost:8888
-
   datasource:
     url: jdbc:postgresql://localhost:5432/jwt_security
     password: 1234
@@ -25,8 +24,15 @@ spring:
 eureka:
   instance:
     hostname: localhost
+    prefer-ip-address: true
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
 server:
   port: 9898
+
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

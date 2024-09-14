@@ -1,5 +1,6 @@
 package org.ridehailing.tripservice.Entity.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -18,17 +19,17 @@ public class Trip {
     @Id
     @GeneratedValue
     Integer id;
-    Boolean isOver;
+    Boolean active;
     double amount;
     boolean isPaid;
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnoreProperties("tripHistory")
+    @JsonIgnore
     Passenger passenger;
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnoreProperties("tripHistory")
+    @JsonIgnore
     Driver driver;
 }

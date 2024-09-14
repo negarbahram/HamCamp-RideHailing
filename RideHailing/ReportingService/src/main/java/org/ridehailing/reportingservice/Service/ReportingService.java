@@ -16,9 +16,10 @@ public class ReportingService {
 
     @RabbitListener(queues = RabbitMQConfig.REPORTING_QUEUE)
     public void recordEvent(String eventMessage) {
+        String[] chunks = eventMessage.split("-");
         EventLog eventLog = new EventLog();
-        eventLog.setEventType("GeneralEvent"); // You could make this more specific based on the message content
-        eventLog.setEventData(eventMessage);
+        eventLog.setEventType(chunks[0]);
+        eventLog.setEventData(chunks[1]);
         eventLog.setTimestamp(LocalDateTime.now());
         eventLogRepository.save(eventLog);
     }

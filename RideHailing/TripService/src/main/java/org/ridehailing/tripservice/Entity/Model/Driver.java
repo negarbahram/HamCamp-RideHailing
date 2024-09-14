@@ -1,5 +1,6 @@
 package org.ridehailing.tripservice.Entity.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -21,11 +22,16 @@ public class Driver {
     Point location;
     String email;
 
-    public Driver(Point location) {
+    public Driver(Point location, String email) {
         this.location = location;
+        this.email = "e@gmail.com";
     }
 
     @OneToMany(mappedBy = "driver")
-    @JsonIgnoreProperties("driver")
+    @JsonIgnore
     List<Trip> tripHistory;
+
+    public String toString() {
+        return "driverId = " + id;
+    }
 }

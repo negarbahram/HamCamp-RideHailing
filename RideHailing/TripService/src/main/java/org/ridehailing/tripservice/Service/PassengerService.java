@@ -2,13 +2,18 @@ package org.ridehailing.tripservice.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RMap;
+import org.redisson.api.RedissonClient;
 import org.ridehailing.tripservice.Entity.Model.Passenger;
 import org.ridehailing.tripservice.Entity.Model.Trip;
 import org.ridehailing.tripservice.Exception.TripNotFoundException;
 import org.ridehailing.tripservice.Repository.PassengerRepository;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+
 
 import java.util.Base64;
 import java.util.List;
@@ -18,45 +23,55 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PassengerService {
 
+    private final JwtService jwtService;
     private final PassengerRepository passengerRepository;
+    private final RedisTemplate<String, Passenger> redisson;
+    private final RedissonClient redissonClient;
+    private RMap<String, Passenger> passengerCache;
 
-    public Trip getActiveTrip(HttpHeaders headers) {
-        Passenger passenger = getPassengerByToken(headers);
+
+    @PostConstruct
+    public void init() {
+        passengerCache = redissonClient.getMap("my_passenger_cache");
+    }
+    public Trip getActiveTrip(Passenger passenger) {
         List<Trip> trips = passenger.getTripHistory();
-        Optional<Trip> trip = trips.stream().filter(Trip::getIsOver).toList().stream().findFirst();
+        Optional<Trip> trip = trips.stream().filter(Trip::getActive).toList().stream().findFirst();
         return trip.orElseThrow(TripNotFoundException::new);
     }
 
-    public Passenger getPassengerByToken(HttpHeaders headers) {
+    public Passenger getPassenger(HttpHeaders headers) {
+        return getPassenger(jwtService.getEmailByToken(headers));
+    }
 
-        String authHeader = headers.get(org.springframework.http.HttpHeaders.AUTHORIZATION).get(0);
-        System.out.println("***" + authHeader);
-
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-            throw new RuntimeException("missing authorization header");
-        }
-
-        final String token = authHeader.substring(7);
-
-        String[] chunks = token.split("\\.");
-        Base64.Decoder decoder = Base64.getUrlDecoder();
-        String payload = new String(decoder.decode(chunks[1]));
-        String subValue = null;
-
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(payload);
-            subValue = jsonNode.get("sub").asText();
-
-            System.out.println("sub: " + subValue);  // Output: sub: 1234567890
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Optional<Passenger> passenger = passengerRepository.findByEmail(subValue);
+    public Passenger getPassenger(String email) {
+        Optional<Passenger> passenger = passengerRepository.findByEmail(email);
         if (passenger.isEmpty())
-            passenger = Optional.of(passengerRepository.save(new Passenger(subValue)));
+            passenger = Optional.of(passengerRepository.save(new Passenger(email)));
 
         return passenger.get();
+    }
+
+    public Passenger get(String email) {
+        Passenger passenger = redisson.opsForValue().get(email);
+        if (passenger == null) {
+            passenger = getPassenger(email);
+            redisson.opsForValue().set(email, passenger);
+        }
+        return passenger;
+    }
+
+    public Passenger get(HttpHeaders headers) {
+        return get(jwtService.getEmailByToken(headers));
+    }
+
+    public void updateCache(String email, Passenger passenger) {
+        passengerRepository.save(passenger);
+        redisson.opsForValue().set(email, passenger);
+    }
+
+    public void updateCache(HttpHeaders headers, Passenger passenger) {
+        passengerRepository.save(passenger);
+        updateCache(jwtService.getEmailByToken(headers), passenger);
     }
 }

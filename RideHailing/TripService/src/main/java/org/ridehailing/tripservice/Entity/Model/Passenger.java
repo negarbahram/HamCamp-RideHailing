@@ -1,5 +1,6 @@
 package org.ridehailing.tripservice.Entity.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import jakarta.persistence.OneToMany;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
@@ -15,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Passenger {
+public class Passenger implements Serializable {
     @Id
     @GeneratedValue
     Integer id;
@@ -23,10 +25,14 @@ public class Passenger {
     String email;
 
     @OneToMany(mappedBy = "passenger")
-    @JsonIgnoreProperties("passenger")
+    @JsonIgnore
     List<Trip> tripHistory;
 
     public Passenger(String email) {
         this.email = email;
+    }
+
+    public String toString() {
+        return "passengerId = " + id;
     }
 }
